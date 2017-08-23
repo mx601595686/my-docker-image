@@ -1,12 +1,55 @@
-# 启动mysql，并配置udf方法
-# 启动mysql之前需先启动mysqld，并在后台执行，通过 /bin/bash -c
-# 中途等待mysqld启动15秒
-# 最后执行SQL语句，SQL语句放在 -e 参数后面
-RUN /bin/bash -c "docker-entrypoint.sh mysqld >/dev/null 2>&1 & " && \
-    echo "等待mysql启动(15秒)" && \
-    sleep 15 && \
-    mysql -e "create function http_get returns string soname 'mysql-udf-http.so'; \
-              create function http_post returns string soname 'mysql-udf-http.so'; \
-              create function http_put returns string soname 'mysql-udf-http.so'; \
-              create function http_delete returns string soname 'mysql-udf-http.so';" && \
-              mysql -e "CREATE DATABASE mydb";
+# 给MySQL增加mysql-udf-http自定义函数
+> [原代码项目地址](https://github.com/y-ken/mysql-udf-http)
+
+编译最好放在linux主机下进行。这里已经有一个在ubuntu16.04（64位）下编译完成的[mysql-udf-http.so](mysql-udf-http.so)
+
+### 安装过程参考
+[给MySQL增加mysql-udf-http和mysql-udf-json自定义函数，让MySQL有调用http接口和查询直接回JSON的能力](http://www.cnblogs.com/kgdxpr/p/5961310.html)
+```bash
+# 如果没安装过mysql，先安装mysql
+apt-get install mysql-server
+
+# 解压
+unzip mysql-udf-http.zip
+cd 到解压的文件夹中
+
+# 安装配置，路径需要根据自己mysql的安装路径进行调整。第一个参数“--prefix”是指定编译完成后保存的路径，第二个参数“--with-mysql”是指mysql_config命令行程序的路径
+./configure --prefix=/usr/local/mysql-udf-http --with-mysql=/usr/local/mysql/bin/mysql_config
+
+# 开始编译
+make && make install
+
+# 编译完成后将程序放到“mysql/lib/plugin”文件夹下
+ln -s /usr/local/mysql-udf-http/lib/mysql-udf-http.so.0.0.0 /usr/local/mysql/lib/plugin/mysql-udf-http.so
+
+# 重启mysql
+service mysql restart
+```
+执行`sql`配置插件
+```sql
+# 删除已有的
+DROP FUNCTION IF EXISTS http_get;
+DROP FUNCTION IF EXISTS http_post;
+DROP FUNCTION IF EXISTS http_put;
+DROP FUNCTION IF EXISTS http_delete;
+
+# 创建
+create function http_get returns string soname 'mysql-udf-http.so';
+create function http_post returns string soname 'mysql-udf-http.so';
+create function http_put returns string soname 'mysql-udf-http.so';
+create function http_delete returns string soname 'mysql-udf-http.so';
+
+# 实例
+select http_get('http://10.10.3.199/dsideal_yy/kgdxpr') as res;
+select http_post('http://10.10.3.199/dsideal_yy/kgdxpr','id=1&type=a') as res;
+```
+
+### 如果编译过程中提示找不到libcurl库
+安装 `sudo apt-get install libcurl4-openssl-dev`
+
+### 查找mysql_config的位置
+`which mysql_config`
+
+### json-functions
+由于现在mysql已经自带`json-functions`了，说就就不需要安装json插件了
+[官方文档](https://dev.mysql.com/doc/refman/5.7/en/json-functions.html)
