@@ -58,3 +58,29 @@ select http_post('http://10.10.3.199/dsideal_yy/kgdxpr','id=1&type=a') as res;
 ### json-functions
 由于现在mysql已经自带`json-functions`了，说就就不需要安装json插件了
 [官方文档](https://dev.mysql.com/doc/refman/5.7/en/json-functions.html)
+
+### 用法说明
+
+#### Description:
+```sql
+SELECT http_get('<url>');
+SELECT http_post('<url>', '<data>');
+SELECT http_put('<url>', '<data>');
+SELECT http_delete('<url>');
+```
+
+#### Example:
+```sql
+/* Baidu Mobile Search */
+SELECT http_get('http://m.baidu.com/s?word=xoyo&pn=0');
+SELECT http_post('http://m.baidu.com/s','word=xoyo&pn=0');
+
+/* Sina Weibo Open Platform */
+SELECT http_get('http://api.t.sina.com.cn/statuses/user_timeline/103500.json?count=1&source=1561596835') AS data;
+SELECT http_post('http://your_sina_uid:your_password@api.t.sina.com.cn/statuses/update.xml?source=1561596835', 'status=Thins is sina weibo test information');
+
+/* Tokyo Tyrant */
+SELECT http_put('http://192.168.8.34:1978/key', 'This is value');
+SELECT http_get('http://192.168.8.34:1978/key');
+SELECT http_delete('http://192.168.8.34:1978/key');
+```
