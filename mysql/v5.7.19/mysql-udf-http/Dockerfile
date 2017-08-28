@@ -1,5 +1,5 @@
 # 这个镜像是根据相同目录下的buildpack-deps镜像构建出来的。
-FROM mysql:buildpack-deps-5.7.19
+FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/mysql:buildpack-deps-5.7.19
 
 # http 插件的版本
 ENV MYSQL_UDF_HTTP=1.0.0
