@@ -1,4 +1,4 @@
-# 将系统换了
+# FROM debian:jessie
 FROM buildpack-deps:jessie
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
@@ -74,16 +74,3 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 3306
 CMD ["mysqld"]
-
-# 上面都是mysql5.7.19的dockerfile内容，下面开始是进行添加mysql-udf-http插件的步骤了
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		unzip \
-	&& rm -rf /var/lib/apt/lists/*
-
-COPY mysql-udf-http.zip /tmp
-RUN unzip /tmp/mysql-udf-http.zip
-
-CMD bash
-
-
