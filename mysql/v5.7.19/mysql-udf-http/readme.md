@@ -84,3 +84,4 @@ SELECT http_put('http://192.168.8.34:1978/key', 'This is value');
 SELECT http_get('http://192.168.8.34:1978/key');
 SELECT http_delete('http://192.168.8.34:1978/key');
 ```
+
