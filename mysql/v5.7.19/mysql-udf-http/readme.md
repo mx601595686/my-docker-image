@@ -2,14 +2,14 @@
 > [原代码项目地址](https://github.com/y-ken/mysql-udf-http)
 
 ### Dockerfile
-由于mysql存放的数据是保存在volume中的，启动容器后就会被覆盖，所以没有办法通过`Dockerfile`来进行配置。容器第一次启动之后需要执行一次配置插件的SQL（在下面）。
+由于mysql存放的数据是保存在volume中的，容器启动后就会被覆盖，所以没有办法通过`Dockerfile`来进行配置。
+所以容器第一次启动之后需要执行一次配置插件的SQL（在下面）。
 
 
-
-### 安装过程参考
+### 编译过程参考
 编译最好放在linux主机下进行。这里已经有一个在ubuntu16.04（64位）下编译完成的[mysql-udf-http.so](mysql-udf-http.so)。
 
-[给MySQL增加mysql-udf-http和mysql-udf-json自定义函数，让MySQL有调用http接口和查询直接回JSON的能力](http://www.cnblogs.com/kgdxpr/p/5961310.html)
+这个编译过程是参考的：[给MySQL增加mysql-udf-http和mysql-udf-json自定义函数，让MySQL有调用http接口和查询直接回JSON的能力](http://www.cnblogs.com/kgdxpr/p/5961310.html)
 ```bash
 # 如果没安装过mysql，先安装mysql
 apt-get install mysql-server
