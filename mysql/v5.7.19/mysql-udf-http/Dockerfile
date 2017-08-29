@@ -1,4 +1,5 @@
 # 这个镜像是根据相同目录下的buildpack-deps镜像构建出来的。
+# 存放在阿里云镜像仓库中。
 FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/mysql:buildpack-deps-5.7.19
 
 # http 插件的版本
