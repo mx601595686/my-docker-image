@@ -1,6 +1,6 @@
 # 简单地将下载地址换成了淘宝cdn
 # tar 解压只会覆盖文件不会覆盖目录
-FROM buildpack-deps:jessie
+FROM buildpack-deps:stretch
 
 RUN groupadd --gid 1000 node \
   && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
