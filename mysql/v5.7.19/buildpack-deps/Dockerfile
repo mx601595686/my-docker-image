@@ -69,7 +69,12 @@ RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/mysql.conf.d/mysqld.cnf \
 VOLUME /var/lib/mysql
 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
+
+# backwards compat
+RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh \
+# 更改一下文件的描述符。不知问什么我复制进去的总是没有执行权限
+    && chmod 744 usr/local/bin/docker-entrypoint.sh
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 3306
