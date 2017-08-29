@@ -1,6 +1,8 @@
 # 这个镜像是根据相同目录下的buildpack-deps镜像构建出来的。
-# 存放在阿里云镜像仓库中。
-FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/mysql:buildpack-deps-5.7.19
+# FROM wujingtao/mysql:buildpack-deps
+
+# 存放在阿里云中的镜像。
+FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/mysql:buildpack-deps-5.7.19-0.0.1
 
 # http 插件的版本
 ENV MYSQL_UDF_HTTP=1.0.0
