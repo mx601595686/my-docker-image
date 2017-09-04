@@ -3,6 +3,11 @@ FROM buildpack-deps:artful
 
 LABEL MAINTAINER=wujingtao
 
+# 存储系统信息
+ENV OS_NAME ubuntu && \
+    OS_VERSION 17.10 && \
+    OS_TAG artful
+
 # 替换成国内源
 COPY sources.list /etc/apt/sources.list
 

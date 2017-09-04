@@ -42,7 +42,7 @@ RUN set -ex; \
 	apt-key list > /dev/null
 
 ENV MYSQL_MAJOR 5.7
-ENV MYSQL_VERSION 5.7.19-1ubuntu17.10
+ENV MYSQL_VERSION 5.7.19-1${OS_NAME}${OS_VERSION}
 
 RUN echo "deb http://repo.mysql.com/apt/ubuntu/ stretch mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
 
