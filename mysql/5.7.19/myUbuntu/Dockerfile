@@ -18,6 +18,8 @@ ENV GOSU_VERSION 1.7
 #	&& chmod +x /usr/local/bin/gosu \
 #	&& gosu nobody true
 #	&& apt-get purge -y --auto-remove ca-certificates wget
+
+# 因为不知道什么原因上面的gosu装不上，所以用apt来装
 RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends gosu=${GOSU_VERSION} && rm -rf /var/lib/apt/lists/* \
     && gosu nobody true
