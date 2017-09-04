@@ -9,6 +9,7 @@ COPY sources.list /etc/apt/sources.list
 # 安装我需要的包
 RUN apt-get update && apt-get install -y --no-install-recommends \
         # 安装MySQL需要这几个
+        ca-certificates \
 		perl \
         pwgen \
 		openssl \
