@@ -6,7 +6,7 @@ FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
 # add gosu for easy step-down from root
-ENV GOSU_VERSION 1.7
+ENV GOSU_VERSION 1.7-1
 #RUN set -x \
 #	&& apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
 #	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
