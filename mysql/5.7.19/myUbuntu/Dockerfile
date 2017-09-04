@@ -1,6 +1,6 @@
 # 这个镜像是根据  ubuntu/17.10  下的Dockerfile构建出来的。
-FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
-#FROM myubuntu
+#FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
+FROM myubuntu
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
@@ -39,19 +39,19 @@ RUN mkdir /docker-entrypoint-initdb.d
 # 		perl \
 # 	&& rm -rf /var/lib/apt/lists/*
 
-RUN set -ex; \
+#RUN set -ex; \
 # gpg: key 5072E1F5: public key "MySQL Release Engineering <mysql-build@oss.oracle.com>" imported
-	key='A4A9406876FCBD3C456770C88C718D3B5072E1F5'; \
-	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-	gpg --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg; \
-	rm -r "$GNUPGHOME"; \
-	apt-key list > /dev/null
+#	key='A4A9406876FCBD3C456770C88C718D3B5072E1F5'; \
+#	export GNUPGHOME="$(mktemp -d)"; \
+#	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+#	gpg --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg; \
+#	rm -r "$GNUPGHOME"; \
+#	apt-key list > /dev/null
 
 ENV MYSQL_MAJOR 5.7
 ENV MYSQL_VERSION 5.7.19-1${OS_NAME}${OS_VERSION}
 
-RUN echo "deb http://repo.mysql.com/apt/ubuntu/ stretch mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
+#RUN echo "deb http://repo.mysql.com/apt/ubuntu/ stretch mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
 
 # the "/var/lib/mysql" stuff here is because the mysql-server postinst doesn't have an explicit way to disable the mysql_install_db codepath besides having a database already "configured" (ie, stuff in /var/lib/mysql/mysql)
 # also, we set debconf keys to make APT a little quieter
