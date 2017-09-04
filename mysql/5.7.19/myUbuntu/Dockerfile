@@ -1,6 +1,6 @@
 # 这个镜像是根据  ubuntu/17.10  下的Dockerfile构建出来的。
-#FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
-FROM myubuntu
+FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
+#FROM myubuntu
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
