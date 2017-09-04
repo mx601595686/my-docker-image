@@ -1,5 +1,6 @@
 # 这个镜像是根据  ubuntu/17.10  下的Dockerfile构建出来的。
-FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
+#FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
+FROM myubuntu
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
@@ -7,7 +8,7 @@ RUN groupadd -r mysql && useradd -r -g mysql mysql
 # add gosu for easy step-down from root
 ENV GOSU_VERSION 1.7
 RUN set -x \
-	# && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
+#	&& apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
 	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
 	&& wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
@@ -15,8 +16,8 @@ RUN set -x \
 	&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
 	&& rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
 	&& chmod +x /usr/local/bin/gosu \
-	&& gosu nobody true \
-	# && apt-get purge -y --auto-remove ca-certificates wget
+	&& gosu nobody true
+#	&& apt-get purge -y --auto-remove ca-certificates wget
 
 RUN mkdir /docker-entrypoint-initdb.d
 
