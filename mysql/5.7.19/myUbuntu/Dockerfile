@@ -6,7 +6,7 @@ FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
 # add gosu for easy step-down from root
-ENV GOSU_VERSION 1.7-1
+#ENV GOSU_VERSION 1.7-1
 #RUN set -x \
 #	&& apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
 #	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
@@ -21,7 +21,7 @@ ENV GOSU_VERSION 1.7-1
 
 # 因为不知道什么原因上面的gosu装不上，所以用apt来装
 RUN set -x \
-    && apt-get update && apt-get install -y --no-install-recommends gosu=${GOSU_VERSION} && rm -rf /var/lib/apt/lists/* \
+    && apt-get update && apt-get install -y --no-install-recommends gosu && rm -rf /var/lib/apt/lists/* \
     && gosu nobody true
 
 RUN mkdir /docker-entrypoint-initdb.d
