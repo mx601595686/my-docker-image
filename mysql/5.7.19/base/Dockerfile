@@ -1,14 +1,28 @@
 # 这个镜像是根据  ubuntu/17.10  下的Dockerfile构建出来的。
-#FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
-FROM wujingtao/ubuntu:17.10
+FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
+#FROM wujingtao/ubuntu:17.10
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
-# 安装gosu
+# add gosu for easy step-down from root
+ENV GOSU_VERSION 1.7
 RUN set -x \
-    && apt-get update && apt-get install -y --no-install-recommends gosu && rm -rf /var/lib/apt/lists/* \
-    && gosu nobody true
+#	&& apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
+	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
+	&& wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
+	&& export GNUPGHOME="$(mktemp -d)" \
+	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+	&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
+	&& rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
+	&& chmod +x /usr/local/bin/gosu \
+	&& gosu nobody true \
+#	&& apt-get purge -y --auto-remove ca-certificates wget
+
+# 下载不了也可以使用下面的方式安装gosu
+#RUN set -x \
+#    && apt-get update && apt-get install -y --no-install-recommends gosu && rm -rf /var/lib/apt/lists/* \
+#    && gosu nobody true
 
 RUN mkdir /docker-entrypoint-initdb.d
 
@@ -25,9 +39,9 @@ ENV MYSQL_MAJOR 5.7
 
 # 本来该执行下面的代码但现在还没有17.10版本
 # ENV MYSQL_VERSION 5.7.19-1${OS_NAME}${OS_VERSION}
-ENV MYSQL_VERSION 5.7.19-1ubuntu17.04
+ENV MYSQL_VERSION 5.7.19-1${OS_NAME}17.04
 # zesty 17.04
-RUN echo "deb http://repo.mysql.com/apt/ubuntu/ zesty mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
+RUN echo "deb http://repo.mysql.com/apt/${OS_NAME}/ zesty mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
 
 RUN { \
 		echo mysql-community-server mysql-community-server/data-dir select ''; \
