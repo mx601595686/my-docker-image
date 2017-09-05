@@ -14,7 +14,6 @@ COPY sources.list /etc/apt/sources.list
 # 安装我需要的包
 RUN apt-get update && apt-get install -y --no-install-recommends \
         # 安装MySQL需要这几个
-        ca-certificates \
 		perl \
         pwgen \
 		openssl \
@@ -47,3 +46,5 @@ RUN mkdir /var/run/sshd && \
 # 容器需要开放SSH 22端口
 EXPOSE 22
 
+# 将工作目录设置到根
+WORKDIR /
