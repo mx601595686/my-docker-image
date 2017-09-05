@@ -1,5 +1,5 @@
 # 这个镜像是根据  ubuntu/17.10  下的Dockerfile构建出来的。
-FROM registry-internal.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
+FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
 #FROM wujingtao/ubuntu:17.10
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
