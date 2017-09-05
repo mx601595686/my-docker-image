@@ -1,4 +1,4 @@
-# 这个镜像是根据相同目录下的myUbuntu镜像构建出来的。
+# 这个镜像是根据相同目录下的base镜像构建出来的。
 FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/mysql:5.7.19-0.0.1
 
 # http 插件的版本
