@@ -1,0 +1,61 @@
+# 这个镜像是根据  ubuntu/17.10  下的Dockerfile构建出来的。
+#FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
+FROM wujingtao/ubuntu:17.10
+
+# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
+RUN groupadd -r mysql && useradd -r -g mysql mysql
+
+# 安装gosu
+RUN set -x \
+    && apt-get update && apt-get install -y --no-install-recommends gosu && rm -rf /var/lib/apt/lists/* \
+    && gosu nobody true
+
+RUN mkdir /docker-entrypoint-initdb.d
+
+RUN set -ex; \
+# gpg: key 5072E1F5: public key "MySQL Release Engineering <mysql-build@oss.oracle.com>" imported
+	key='A4A9406876FCBD3C456770C88C718D3B5072E1F5'; \
+	export GNUPGHOME="$(mktemp -d)"; \
+	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+	gpg --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg; \
+	rm -r "$GNUPGHOME"; \
+	apt-key list > /dev/null
+
+ENV MYSQL_MAJOR 5.7
+
+# 本来该执行下面的代码但现在还没有17.10版本
+# ENV MYSQL_VERSION 5.7.19-1${OS_NAME}${OS_VERSION}
+ENV MYSQL_VERSION 5.7.19-1ubuntu17.04
+# zesty 17.04
+RUN echo "deb http://repo.mysql.com/apt/ubuntu/ zesty mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
+
+RUN { \
+		echo mysql-community-server mysql-community-server/data-dir select ''; \
+		echo mysql-community-server mysql-community-server/root-pass password ''; \
+		echo mysql-community-server mysql-community-server/re-root-pass password ''; \
+		echo mysql-community-server mysql-community-server/remove-test-db select false; \
+	} | debconf-set-selections \
+	&& apt-get update && apt-get install -y mysql-server="${MYSQL_VERSION}" && rm -rf /var/lib/apt/lists/* \
+	&& rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
+	&& chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
+# ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
+	&& chmod 777 /var/run/mysqld
+
+# comment out a few problematic configuration values
+# don't reverse lookup hostnames, they are usually another container
+RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/mysql.conf.d/mysqld.cnf \
+	&& echo '[mysqld]\nskip-host-cache\nskip-name-resolve' > /etc/mysql/conf.d/docker.cnf
+
+VOLUME /var/lib/mysql
+
+COPY docker-entrypoint.sh /usr/local/bin/
+
+# backwards compat
+RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh \
+# 更改一下文件的描述符。
+    && chmod 755 usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+EXPOSE 3306
+CMD ["mysqld"]
