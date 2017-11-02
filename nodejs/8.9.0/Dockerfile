@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-16.04-0.0.1
+FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/ubuntu:16.04
 
 RUN groupadd --gid 1000 node \
   && useradd --uid 1000 --gid node --shell /bin/bash --create-home node

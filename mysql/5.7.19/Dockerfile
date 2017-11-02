@@ -1,6 +1,4 @@
-# 这个镜像是根据  ubuntu/17.10  下的Dockerfile构建出来的。
-FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/os:ubuntu-17.10-0.0.1
-#FROM wujingtao/ubuntu:17.10
+FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/ubuntu:16.04
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
@@ -36,13 +34,12 @@ RUN set -ex; \
 	apt-key list > /dev/null
 
 ENV MYSQL_MAJOR 5.7
+ENV MYSQL_VERSION 5.7.20-ubuntu16.04
 
-# 本来该执行下面的代码但现在还没有17.10版本
-# ENV MYSQL_VERSION 5.7.19-1${OS_NAME}${OS_VERSION}
-ENV MYSQL_VERSION 5.7.19-1${OS_NAME}17.04
-# zesty 17.04
-RUN echo "deb http://repo.mysql.com/apt/${OS_NAME}/ zesty mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
+RUN echo "deb http://repo.mysql.com/apt/ubuntu/ xenial mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
 
+# the "/var/lib/mysql" stuff here is because the mysql-server postinst doesn't have an explicit way to disable the mysql_install_db codepath besides having a database already "configured" (ie, stuff in /var/lib/mysql/mysql)
+# also, we set debconf keys to make APT a little quieter
 RUN { \
 		echo mysql-community-server mysql-community-server/data-dir select ''; \
 		echo mysql-community-server mysql-community-server/root-pass password ''; \
@@ -53,22 +50,22 @@ RUN { \
 	&& rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
 	&& chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
 # ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
-	&& chmod 777 /var/run/mysqld
-
+	&& chmod 777 /var/run/mysqld \
 # comment out a few problematic configuration values
+	&& find /etc/mysql/ -name '*.cnf' -print0 \
+		| xargs -0 grep -lZE '^(bind-address|log)' \
+		| xargs -rt -0 sed -Ei 's/^(bind-address|log)/#&/' \
 # don't reverse lookup hostnames, they are usually another container
-RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/mysql.conf.d/mysqld.cnf \
 	&& echo '[mysqld]\nskip-host-cache\nskip-name-resolve' > /etc/mysql/conf.d/docker.cnf
 
 VOLUME /var/lib/mysql
 
 COPY docker-entrypoint.sh /usr/local/bin/
-
 # backwards compat
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh \
 # 更改一下文件的描述符。
     && chmod 755 usr/local/bin/docker-entrypoint.sh
-
+    
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 3306
