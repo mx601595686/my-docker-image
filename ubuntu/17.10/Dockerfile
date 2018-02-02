@@ -41,8 +41,8 @@ RUN echo "${TIME_ZONE}" > /etc/timezone && ln -sf /usr/share/zoneinfo/${TIME_ZON
 RUN mkdir /var/run/sshd && \
     # 允许root用户登录
     sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    # 设置root ssh远程登录密码为root
-    echo "root:root" | chpasswd
+    # 设置root ssh远程登录密码为testroot
+    echo "root:testroot" | chpasswd
 
 # 容器需要开放SSH 22端口
 EXPOSE 22
