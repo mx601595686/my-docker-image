@@ -1,10 +1,8 @@
 FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/ubuntu:16.04
 
-RUN apt-get update
-
-RUN apt-get install -y  --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     openssh-server \
-    vim
+	&& rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /var/run/sshd
 
