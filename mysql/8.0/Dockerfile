@@ -3,6 +3,8 @@ FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/ubuntu:16.04
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
+RUN apt-get update && apt-get install -y --no-install-recommends gnupg && rm -rf /var/lib/apt/lists/*
+
 # add gosu for easy step-down from root
 ENV GOSU_VERSION 1.7
 RUN set -x \
