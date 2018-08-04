@@ -3,8 +3,6 @@ FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/ubuntu:16.04
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
-RUN apt-get update && apt-get install -y --no-install-recommends gnupg gpgconf && rm -rf /var/lib/apt/lists/*
-
 # add gosu for easy step-down from root
 ENV GOSU_VERSION 1.7
 RUN set -x \
@@ -32,7 +30,7 @@ RUN set -ex; \
 	export GNUPGHOME="$(mktemp -d)"; \
 	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	gpg --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg; \
-	gpgconf --kill all; \
+#	gpgconf --kill all; \
 	rm -rf "$GNUPGHOME"; \
 	apt-key list > /dev/null
 
