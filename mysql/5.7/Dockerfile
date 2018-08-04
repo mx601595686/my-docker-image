@@ -30,11 +30,12 @@ RUN set -ex; \
 	export GNUPGHOME="$(mktemp -d)"; \
 	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 	gpg --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg; \
-	rm -r "$GNUPGHOME"; \
+	gpgconf --kill all; \
+	rm -rf "$GNUPGHOME"; \
 	apt-key list > /dev/null
 
 ENV MYSQL_MAJOR 5.7
-ENV MYSQL_VERSION 5.7.21-1${OS_NAME}${OS_VERSION}
+ENV MYSQL_VERSION 5.7.23-1${OS_NAME}${OS_VERSION}
 
 RUN echo "deb http://repo.mysql.com/apt/${OS_NAME}/ ${OS_TAG} mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
 
@@ -61,6 +62,7 @@ RUN { \
 VOLUME /var/lib/mysql
 
 COPY docker-entrypoint.sh /usr/local/bin/
+
 # backwards compat
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh \
 # 更改一下文件的描述符。

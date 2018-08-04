@@ -1,5 +1,5 @@
 # 这个镜像是根据相同目录下的base镜像构建出来的。
-FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/mysql:5.7.19
+FROM registry.cn-hangzhou.aliyuncs.com/wujingtao/mysql:5.7
 
 # http 插件的版本
 ENV MYSQL_UDF_HTTP 1.0.0
