@@ -22,8 +22,6 @@ RUN set -x \
 #    && apt-get update && apt-get install -y --no-install-recommends gosu && rm -rf /var/lib/apt/lists/* \
 #    && gosu nobody true
 
-RUN mkdir /docker-entrypoint-initdb.d
-
 RUN set -ex; \
 # gpg: key 5072E1F5: public key "MySQL Release Engineering <mysql-build@oss.oracle.com>" imported
 	key='A4A9406876FCBD3C456770C88C718D3B5072E1F5'; \
@@ -68,6 +66,9 @@ RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh \
 # 更改一下文件的描述符。
     && chmod 755 usr/local/bin/docker-entrypoint.sh
     
+# 不知道为什么放到之前官方的位置，编译完成后目录会消失，导致错误，所以放到最后了
+RUN mkdir /docker-entrypoint-initdb.d
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 3306
