@@ -1,4 +1,4 @@
-FROM mysql:5.7
+FROM mongo:4
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     tzdata \
