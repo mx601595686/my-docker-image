@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 if [[ $1 == 'server' ]]; then
     http-server . -p 80
