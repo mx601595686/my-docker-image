@@ -75,10 +75,10 @@ COPY entrypoint.sh /entrypoint.sh
 
 # 这一段是我添加的，上面需要安装dos2unix
 RUN dos2unix /entrypoint.sh && \
-    dos2unix /etc/service/runit/kcptun/run && \
-    dos2unix /etc/service/runit/shadowsocks/run && \
+    dos2unix /etc/service/kcptun/run && \
+    dos2unix /etc/service/shadowsocks/run && \
     chmod 777 /entrypoint.sh && \
-    chmod 777 /etc/service/runit/kcptun/run && \
-    chmod 777 /etc/service/runit/shadowsocks/run
+    chmod 777 /etc/service/kcptun/run && \
+    chmod 777 /etc/service/shadowsocks/run
 
 ENTRYPOINT ["/entrypoint.sh"]
