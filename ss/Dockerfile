@@ -14,7 +14,6 @@ ENV PLUGIN_V2RAY_DOWNLOAD_URL https://github.com/shadowsocks/v2ray-plugin/releas
 ENV LINUX_HEADERS_DOWNLOAD_URL=http://dl-cdn.alpinelinux.org/alpine/v3.7/main/x86_64/linux-headers-4.4.6-r2.apk
 
 RUN apk upgrade \
-    && apk add dos2unix \
     && apk add bash tzdata rng-tools runit \
     && apk add --virtual .build-deps \
         autoconf \
@@ -72,13 +71,5 @@ SHELL ["/bin/bash"]
 
 COPY runit /etc/service
 COPY entrypoint.sh /entrypoint.sh
-
-# 这一段是我添加的，上面需要安装dos2unix
-RUN dos2unix /entrypoint.sh && \
-    dos2unix /etc/service/kcptun/run && \
-    dos2unix /etc/service/shadowsocks/run && \
-    chmod 777 /entrypoint.sh && \
-    chmod 777 /etc/service/kcptun/run && \
-    chmod 777 /etc/service/shadowsocks/run
 
 ENTRYPOINT ["/entrypoint.sh"]
