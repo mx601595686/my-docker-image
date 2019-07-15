@@ -7,6 +7,7 @@ RUN apk update && apk add --no-cache privoxy
 COPY entrypoint.sh /my_entrypoint.sh
 COPY config /etc/privoxy/config
 COPY README.md /README.md
+COPY runit /etc/service
 
 EXPOSE 1111
 EXPOSE 2222/udp
