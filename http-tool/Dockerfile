@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM alpine
 
 COPY README.md /README.md
 COPY entry.sh /entry.sh
