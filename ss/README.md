@@ -10,7 +10,7 @@
 * `-p`：代理服务器`kcptun`端口号
 
 ### 暴露出的端口
-* `1111`：`socks5`端口
+* `1111`：远端服务器代理端口或客户端`socks5`端口
 * `2222`：命令为`server`时暴露的`kcptun`端口
 * `3333`：命令为`client`时暴露的`http`代理端口
 
@@ -20,7 +20,7 @@ docker stop ss-server; \
 docker rm -f ss-server; \
 docker rmi registry.cn-hangzhou.aliyuncs.com/wujingtao/ss; \
 docker pull registry.cn-hangzhou.aliyuncs.com/wujingtao/ss; \
-docker run --name ss-server -d -p 1234:1111 -p 4321:2222/udp \
+docker run --name ss-server -d -p 1111:1111 -p 2222:2222/udp \
 registry.cn-hangzhou.aliyuncs.com/wujingtao/ss server -k 登陆密码
 ```
 
@@ -30,7 +30,7 @@ docker stop ss-server; \
 docker rm -f ss-server; \
 docker rmi registry.cn-hangzhou.aliyuncs.com/wujingtao/ss; \
 docker pull registry.cn-hangzhou.aliyuncs.com/wujingtao/ss; \
-docker run --name ss-server -d -p 1080:1111 -p 2080:3333 \
+docker run --name ss-server -d -p 1111:1111 -p 3333:3333 \
 registry.cn-hangzhou.aliyuncs.com/wujingtao/ss client -s 代理服务器IP -p UDP端口号 -k 登陆密码
 ```
 
