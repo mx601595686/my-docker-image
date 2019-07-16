@@ -31,7 +31,7 @@ docker rm -f ss-client; \
 docker rmi registry.cn-hangzhou.aliyuncs.com/wujingtao/ss; \
 docker pull registry.cn-hangzhou.aliyuncs.com/wujingtao/ss; \
 docker run --name ss-client -d -p 1111:1111 -p 3333:3333 \
-registry.cn-hangzhou.aliyuncs.com/wujingtao/ss client -s 代理服务器IP -p UDP端口号 -k 登陆密码
+registry.cn-hangzhou.aliyuncs.com/wujingtao/ss client -s 代理服务器IP -p kcptun端口号 -k 登陆密码
 ```
 
 ### 其他参考
