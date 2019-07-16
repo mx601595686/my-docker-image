@@ -5,14 +5,14 @@
 * `client`：启动客户端
 
 ### 参数
-* `-k`：登陆密码
+* `-k`：代理服务器登陆密码
 * `-s`：代理服务器IP
-* `-p`：UDP端口号
+* `-p`：代理服务器`kcptun`端口号
 
 ### 暴露出的端口
-* `1111`：SOCK5
-* `2222`：KCPTUN
-* `3333`：客户端暴露的 HTTP 代理端口
+* `1111`：`socks5`端口
+* `2222`：命令为`server`时暴露的`kcptun`端口
+* `3333`：命令为`client`时暴露的`http`代理端口
 
 ### 创建SS服务器
 ```
@@ -33,3 +33,12 @@ docker pull registry.cn-hangzhou.aliyuncs.com/wujingtao/ss; \
 docker run --name ss-server -d -p 1080:1111 -p 2080:3333 \
 registry.cn-hangzhou.aliyuncs.com/wujingtao/ss client -s 代理服务器IP -p UDP端口号 -k 登陆密码
 ```
+
+### 其他参考
+* 加密方式：`aes-256-gcm`
+* kcptun配置：`dscp=0;mtu=1350;parityshard=3;mode=fast;cryto=none`
+* [ss windows客户端](https://github.com/shadowsocks/shadowsocks-windows)。( xp最高可用版本为3.2 )
+* [ss android客户端](https://github.com/shadowsocks/shadowsocks-android)
+* [kcptun 客户端](https://github.com/xtaci/kcptun)
+* [kcptun windows图形界面](https://github.com/dfdragon/kcptun_gclient)
+* [kcptun android插件](https://github.com/shadowsocks/kcptun-android)
