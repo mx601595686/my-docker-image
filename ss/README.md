@@ -9,6 +9,8 @@
 * `-s`：代理服务器IP
 * `-p`：代理服务器`kcptun`端口号
 * `-m`：`kcptun`加速模式：fast3, fast2, fast, normal。默认fast
+    * > 对于服务器，使用默认`fast`就足够了，最多`fast2`，`fast3`对服务器而言没有太多意义
+    * > 对于客户端，如果没有过多的上传流量推荐直接开到`fast3`，这样可加快对服务器的`ACK`响应，减少服务器重复发包的数量，节约服务器流量。
 
 ### 暴露出的端口
 * `1111`：远端服务器代理端口或客户端`socks5`端口
@@ -37,7 +39,7 @@ registry.cn-hangzhou.aliyuncs.com/wujingtao/ss client -s 代理服务器IP -p kc
 
 ### 其他参考
 * 加密方式：`aes-256-gcm`
-* kcptun配置：`dscp=0;mtu=1350;parityshard=3;mode=fast;cryto=none`
+* kcptun配置：`dscp=0;mtu=1350;parityshard=3;mode=fast3;cryto=none`
 * [ss windows客户端](https://github.com/shadowsocks/shadowsocks-windows)。( xp最高可用版本为3.2 )
 * [ss android客户端](https://github.com/shadowsocks/shadowsocks-android)
 * [kcptun 客户端](https://github.com/xtaci/kcptun)
