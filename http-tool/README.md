@@ -1,3 +1,11 @@
-# 静态文件服务器和下载工具使用方法：
-1. 文件服务器：docker run --rm -v $(pwd):/path -p 8080:80 http-tool server
-2. 下载文件：docker run -v $(pwd):/path http-tool download 网址 [文件名]
+## 文件服务器
+
+```sh
+docker run --rm -d -v $(pwd):/path -p 8080:80 registry.cn-hangzhou.aliyuncs.com/wujingtao/http-tool server
+```
+
+## 文件下载器
+
+```sh
+docker run --rm -d -v $(pwd):/path registry.cn-hangzhou.aliyuncs.com/wujingtao/http-tool download 网址 [文件名]
+```
